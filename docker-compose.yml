@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  service_haproxy:
+    image: haproxy:1.7
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./haproxydata:/usr/local/etc/haproxy:ro
+  service_db:
+    image: postgres:11.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata/:/var/lib/postgresql/data
+  service_redis:
+    image: redis:5.0.7
+    ports:
+      - "6379:6379"
+  service_devdocs:
+    image: jekyll/jekyll:3.8
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./documentation:/srv/jekyll
+    command: jekyll serve
+  service_web:
+    build: ./code/
+    command: bash -c "./bin/http"
+    volumes:
+      - './code/:/app'
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      RAILS_ENV: development
+      NODE_ENV: development
+      DOCKER_HOST_IP: 172.17.0.1
+    depends_on:
+      - service_redis
+      - service_db
