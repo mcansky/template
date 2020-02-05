@@ -17,7 +17,7 @@ We see it as a way to get everything the team needs into a single place with git
 
 ### ./code
 
-One or more services code bases. Do what you want in this one.
+One or more services code bases. It comes with a basic Dockerfile using a simple hello world sinatra app. You can replace it with what ever you want.
 
 ### ./documentation
 
@@ -40,7 +40,7 @@ HaProxy is used to simplify your life here : no specific port to remember, you c
 
 While a bit intimidating it's actually fairly straight forward. The `haproxydata` folder contains an example to start from.
 
-If you want a web service and the documentation to be pointed to with using hostnames such as web.example.org.local and doc.example.org.local you should have the following :
+If you want a web service and the documentation to be pointed to with using hostnames such as web.myteam.local and doc.myteam.local you should have the following :
 
 ```
 global
@@ -60,12 +60,12 @@ defaults
 frontend web
     bind *:8000
     mode http
-    acl web hdr_sub(host) -i web.example.org.local
-    acl doc hdr_sub(host) -i doc.example.org.local
+    acl web hdr_sub(host) -i web.myteam.local
+    acl doc hdr_sub(host) -i doc.myteam.local
     use_backend web if web
     use_backend documentation if doc
     option httpclose
-    default_backend web 
+    default_backend documentation
 
 backend web
   timeout server 4h
@@ -87,7 +87,7 @@ It's good to note that the ip address used for the backends are the one of the d
 Once you have made the changes in the haproxy config file you want to edit your /etc/hosts file and add entries pointing to the right place :
 
 ```
-0.0.0.0 web.example.org.local doc.example.org.local
+0.0.0.0 myteam.local web.myteam.local doc.myteam.local
 ```
 
 ### setup needed for documentation
@@ -100,7 +100,7 @@ email: changeme@example.org
 description: >- # this means to ignore newlines until "baseurl:"
   This is the internal documentation for the ChangeMe team
 baseurl: "/" # the subpath of your site, e.g. /blog
-url: "http://doc.example.org.local:8000"
+url: "http://doc.myteam.local:8000"
 
 markdown: kramdown
 theme: just-the-docs
@@ -112,3 +112,7 @@ search_enabled: false
 ```
 
 `url` should be set correctly depending on the hostname you decided to use for the documentation part. The port should be the one you picked for the haproxy service, which is 8000 by default.
+
+### let's roll
+
+At the very least you need to edit the /etc/hosts so that it includes the `myteam.local`, `web.myteam.local` and `doc.myteam.local` entries. With just that done you can run `docker-compose up` and the defaults will work. Head to `http://myteam.local:8000` and you will land on the documentation host.

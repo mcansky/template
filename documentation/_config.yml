@@ -3,7 +3,7 @@ email: changeme@example.org
 description: >- # this means to ignore newlines until "baseurl:"
   This is the internal documentation for the ChangeMe team
 baseurl: "/" # the subpath of your site, e.g. /blog
-url: "http://doc.example.org.local:8000"
+url: "http://doc.myteam.local:8000"
 
 markdown: kramdown
 theme: just-the-docs
