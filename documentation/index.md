@@ -17,3 +17,16 @@ You can checkout Jekyll's [Just-the-docs theme page](https://pmarsceill.github.i
 ## Web service
 
 You web service is waiting for you on [http://web.myteam.local:8000](http://web.myteam.local:8000).
+
+## Your documentation
+
+This starter kit contains a few chosen bits to showcase possible uses of such a documentation service.
+
+### Culture
+
+- [Git](/git)
+- [Coding style](/coding_style)
+
+### Processes
+
+- [Releases](process/releases)
